@@ -1,0 +1,44 @@
+{
+    "name": "ericli1018/awesome-fields-for-backpack",
+    "description": "Provide convenient fields",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ericli1018",
+            "email": "ericli1018@yahoo.com.tw",
+            "homepage": "https://github.com/ericli1018"
+        }
+    ],
+    "homepage": "https://github.com/ericli1018/awesome-fields-for-backpack",
+    "keywords": [
+        "Laravel", "Backpack", "Backpack for Laravel", "Backpack Addon", "AwesomeFieldsForBackpack"
+    ],
+    "require": {
+        "illuminate/support": "~8|~9|~10",
+        "backpack/crud": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~5|~6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ericli1018\\AwesomeFieldsForBackpack\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ericli1018\\AwesomeFieldsForBackpack\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --testdox"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ericli1018\\AwesomeFieldsForBackpack\\AddonServiceProvider"
+            ]
+        }
+    }
+}
