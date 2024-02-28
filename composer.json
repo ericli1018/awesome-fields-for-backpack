@@ -15,7 +15,10 @@
     ],
     "require": {
         "illuminate/support": "~8|~9|~10",
-        "backpack/crud": "^6.3"
+        "backpack/crud": "^6.3",
+        "select2/select2": "^4.0",
+        "tinymce/tinymce": "^5.10.9",
+        "mklkj/tinymce-i18n": "^24.1.29"
     },
     "require-dev": {
         "phpunit/phpunit": "~9.0",

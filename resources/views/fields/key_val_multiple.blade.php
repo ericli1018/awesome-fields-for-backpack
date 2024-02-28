@@ -38,7 +38,8 @@
 
 {{-- CUSTOM CSS --}}
 @push('crud_fields_styles')
-    @bassetBlock('backpack/crud/fields/key_val_multiple_field-style.css')
+    <!-- include key_val_multiple css -->
+    @bassetBlock('backpack/crud/fields/key_val_multiple_field.css')
         <style>
             .key_val_multiple_area {
                 border: 1px solid rgba(0,40,100,.12);
@@ -56,6 +57,7 @@
 
 {{-- CUSTOM JS --}}
 @push('crud_fields_scripts')
+    <!-- include key_val_multiple js -->
     @bassetBlock('backpack/crud/fields/key_val_multiple_field.js')
     <script>
         function bpFieldInitKeyValMultipleElement(element) {

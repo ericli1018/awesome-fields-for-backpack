@@ -117,7 +117,8 @@
 {{-- ########################################## --}}
 {{-- Extra CSS and JS for this particular field --}}
 	@push('crud_fields_styles')
-	@bassetBlock('backpack/crud/fields/upload-img-multiple-field.css')
+	<!-- include upload_img_multiple css -->
+	@bassetBlock('backpack/crud/fields/upload-img-multiple.css')
 	<style type="text/css">
 		.existing-img-file {
 			border: 1px solid #666;
@@ -249,7 +250,8 @@
 	@endpush
 
     @push('crud_fields_scripts')
-    	@bassetBlock('backpack/crud/fields/upload-img-multiple-field.js')
+		<!-- include upload_img_multiple js-->
+    	@bassetBlock('backpack/crud/fields/upload-img-multiple.js')
         <script>
         	function bpFieldInitUploadImgMultipleElement(element) {
 				//var imgDT = new DataTransfer();
