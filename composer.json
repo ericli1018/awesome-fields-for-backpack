@@ -16,7 +16,7 @@
     "require": {
         "illuminate/support": "~8|~9|~10",
         "backpack/crud": "^6.3",
-        "select2/select2": "^4.1.0-rc.0",
+        "select2/select2": "^4.0.13",
         "tinymce/tinymce": "^5.10.9",
         "mklkj/tinymce-i18n": "^24.1.29"
     },

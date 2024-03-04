@@ -73,11 +73,14 @@
     <script>
         function bpFieldInitSelect2MultipleElement(element) {
             var $select_all = element.attr('data-select-all');
+            var $select_allowNull = {{ $field['allows_null'] }};
             if (!element.hasClass("select2-hidden-accessible"))
             {
                 let $isFieldInline = element.data('field-is-inline');
 
                 var $obj = element.select2({
+                    placeholder: '',
+                    allowClear: $select_allowNull,
                     theme: "bootstrap",
                     dropdownParent: $isFieldInline ? $('#inline-create-dialog .modal-content') : document.body
                 });
