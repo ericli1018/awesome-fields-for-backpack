@@ -59,8 +59,14 @@
 						$comment = @$item['comment'];
 						$file_path = @$item['file_path'];
 						$file_name = @$item['fn'];
-					} else {
+					} else 
+					if (is_string($item))
+					{
 						$file_path = $item;
+					}
+					else
+					{
+						continue;
 					}
 				@endphp
 				<div class="file-preview float-left {{ $field['name'] }}-file-preview">
