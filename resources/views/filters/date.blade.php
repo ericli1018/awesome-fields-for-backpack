@@ -17,7 +17,7 @@
 							value="{{ $filter->currentValue }}"
 						@endif
 		        		>
-		        <div class="input-group-append datepicker-{{ $filter->key }}-clear-button">
+		        <div class="input-group-append datepicker-clear-button">
 		          <a class="input-group-text" href=""><i class="la la-times"></i></a>
 		        </div>
 		    </div>
@@ -55,55 +55,60 @@
     @bassetBlock('backpack/crud/filters/date.js')
     <script>
 		jQuery(document).ready(function($) {
-			var dateInput = $('#datepicker-{{ $filter->key }}').datepicker({
-				autoclose: true,
-				format: 'yyyy-mm-dd',
-				todayHighlight: true,
-				language: '{{ $language }}',
-			})
-			.on('changeDate', function(e) {
-				var d = new Date(e.date);
-				// console.log(e);
-				// console.log(d);
-				if (isNaN(d.getFullYear())) {
-					var value = '';
-				} else {
-					var value = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
-				}
+			$('li[filter-type=date]').not('[filter-enabled]').each(function () {
+				$(this).attr('filter-enabled', '');
+				var filter_name = $(this).attr('filter-name');
+                var filter_key = $(this).attr('filter-key');
+				var _self = $(this);
 
-				var parameter = '{{ $filter->name }}';
+				var dateInput = $('#datepicker-' + filter_key).datepicker({
+					autoclose: true,
+					format: 'yyyy-mm-dd',
+					todayHighlight: true,
+					language: '{{ $language }}',
+				})
+				.on('changeDate', function(e) {
+					var d = new Date(e.date);
+					if (isNaN(d.getFullYear())) {
+						var value = '';
+					} else {
+						var value = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+					}
 
-		    	// behaviour for ajax table
-				var ajax_table = $('#crudTable').DataTable();
-				var current_url = ajax_table.ajax.url();
-				var new_url = addOrUpdateUriParameter(current_url, parameter, value);
+					var parameter = filter_name;
 
-				// replace the datatables ajax url with new_url and reload it
-				new_url = normalizeAmpersand(new_url.toString());
-				ajax_table.ajax.url(new_url).load();
+					// behaviour for ajax table
+					var ajax_table = $('#crudTable').DataTable();
+					var current_url = ajax_table.ajax.url();
+					var new_url = addOrUpdateUriParameter(current_url, parameter, value);
 
-				// add filter to URL
-				crud.updateUrl(new_url);
+					// replace the datatables ajax url with new_url and reload it
+					new_url = normalizeAmpersand(new_url.toString());
+					ajax_table.ajax.url(new_url).load();
 
-				// mark this filter as active in the navbar-filters
-				if (URI(new_url).hasQuery('{{ $filter->name }}', true)) {
-					$('li[filter-key={{ $filter->key }}]').removeClass('active').addClass('active');
-				}
+					// add filter to URL
+					crud.updateUrl(new_url);
+
+					// mark this filter as active in the navbar-filters
+					if (URI(new_url).hasQuery(filter_name, true)) {
+						$(_self).removeClass('active').addClass('active');
+					}
+				});
+
+				$(_self).on('filter:clear', function(e) {
+					// console.log('date filter cleared');
+					$(_self).removeClass('active');
+					$('#datepicker-' + filter_key).datepicker('update', '');
+					$('#datepicker-' + filter_key).trigger('changeDate');
+				});
+
+				// datepicker clear button
+				$(_self).find(".datepicker-clear-button").click(function(e) {
+					e.preventDefault();
+
+					$(_self).trigger('filter:clear');
+				});
 			});
-
-			$('li[filter-key={{ $filter->key }}]').on('filter:clear', function(e) {
-				// console.log('date filter cleared');
-				$('li[filter-key={{ $filter->key }}]').removeClass('active');
-				$('#datepicker-{{ $filter->key }}').datepicker('update', '');
-				$('#datepicker-{{ $filter->key }}').trigger('changeDate');
-			});
-
-			// datepicker clear button
-			$(".datepicker-{{ $filter->key }}-clear-button").click(function(e) {
-				e.preventDefault();
-
-				$('li[filter-key={{ $filter->key }}]').trigger('filter:clear');
-			})
 		});
     </script>
     @endBassetBlock

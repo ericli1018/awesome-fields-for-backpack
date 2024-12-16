@@ -10,6 +10,9 @@
 			<div class="input-group">
 		        <input class="form-control pull-right"
 		        		id="text-filter-{{ $filter->key }}"
+						data-filter-key="{{ $filter->key }}"
+						data-filter-name="{{ $filter->name }}"
+						data-filter-type="text"
 		        		type="text"
 						@if ($filter->currentValue)
 							value="{{ $filter->currentValue }}"
@@ -34,44 +37,49 @@
 	@bassetBlock('backpack/crud/filters/text.js')
 	<script>
 		jQuery(document).ready(function($) {
-			$('#text-filter-{{ $filter->key }}').on('change', function(e) {
+			$('input[data-filter-type=text]').not('[data-filter-enabled]').each(function () {
+				$(this).attr('data-filter-enabled', '');
+				var filter_name = $(this).attr('data-filter-name');
+                var filter_key = $(this).attr('data-filter-key');
+				
+				$(this).on('change', function(e) {
+					var parameter = filter_name;
+					var value = $(this).val();
 
-				var parameter = '{{ $filter->name }}';
-				var value = $(this).val();
+					// behaviour for ajax table
+					var ajax_table = $('#crudTable').DataTable();
+					var current_url = ajax_table.ajax.url();
+					var new_url = addOrUpdateUriParameter(current_url, parameter, value);
 
-		    	// behaviour for ajax table
-				var ajax_table = $('#crudTable').DataTable();
-				var current_url = ajax_table.ajax.url();
-				var new_url = addOrUpdateUriParameter(current_url, parameter, value);
+					// replace the datatables ajax url with new_url and reload it
+					new_url = normalizeAmpersand(new_url.toString());
+					ajax_table.ajax.url(new_url).load();
 
-				// replace the datatables ajax url with new_url and reload it
-				new_url = normalizeAmpersand(new_url.toString());
-				ajax_table.ajax.url(new_url).load();
+					// add filter to URL
+					crud.updateUrl(new_url);
 
-				// add filter to URL
-				crud.updateUrl(new_url);
+					// mark this filter as active in the navbar-filters
+					if (URI(new_url).hasQuery(filter_name, true)) {
+						$('li[filter-key=' + filter_key + ']').removeClass('active').addClass('active');
+					} else {
+						$('li[filter-key=' + filter_key + ']').trigger('filter:clear');
+					}
+				});
 
-				// mark this filter as active in the navbar-filters
-				if (URI(new_url).hasQuery('{{ $filter->name }}', true)) {
-					$('li[filter-key={{ $filter->key }}]').removeClass('active').addClass('active');
-				} else {
-					$('li[filter-key={{ $filter->key }}]').trigger('filter:clear');
-				}
+				$('li[filter-key=' + filter_key + ']').on('filter:clear', function(e) {
+					$('li[filter-key=' + filter_key + ']').removeClass('active');
+					$('#text-filter-' + filter_key).val('');
+				});
+
+				// datepicker clear button
+				$('.text-filter-' + filter_key + '-clear-button').click(function(e) {
+					e.preventDefault();
+
+					$('li[filter-key=' + filter_key + ']').trigger('filter:clear');
+					$('#text-filter-' + filter_key).val('');
+					$('#text-filter-' + filter_key).trigger('change');
+				})
 			});
-
-			$('li[filter-key={{ $filter->key }}]').on('filter:clear', function(e) {
-				$('li[filter-key={{ $filter->key }}]').removeClass('active');
-				$('#text-filter-{{ $filter->key }}').val('');
-			});
-
-			// datepicker clear button
-			$(".text-filter-{{ $filter->key }}-clear-button").click(function(e) {
-				e.preventDefault();
-
-				$('li[filter-key={{ $filter->key }}]').trigger('filter:clear');
-				$('#text-filter-{{ $filter->key }}').val('');
-				$('#text-filter-{{ $filter->key }}').trigger('change');
-			})
 		});
 	</script>
 	@endBassetBlock

@@ -39,7 +39,7 @@
 										placeholder = "max value"
 									@endif
 				        		>
-				        <div class="input-group-append range-filter-{{ $filter->key }}-clear-button">
+				        <div class="input-group-append range-filter-clear-button">
 				          <a class="input-group-text" href=""><i class="la la-times"></i></a>
 				        </div>
 				    </div>
@@ -76,54 +76,60 @@ END OF FILTER JAVSCRIPT CHECKLIST --}}
     @bassetBlock('backpack/crud/filters/range.js')
 	<script>
 		jQuery(document).ready(function($) {
-			$("li[filter-key={{ $filter->key }}] .from, li[filter-key={{ $filter->key }}] .to").change(function(e) {
-				e.preventDefault();
-				var from = $("li[filter-key={{ $filter->key }}] .from").val();
-				var to = $("li[filter-key={{ $filter->key }}] .to").val();
-				if (from || to) {
-					var range = {
-						'from': from,
-						'to': to
-					};
-					var value = JSON.stringify(range);
-				} else {
-					//this change to empty string,because addOrUpdateUriParameter method just judgment string
-					var value = '';
-				}
-				var parameter = '{{ $filter->name }}';
+			$('li[filter-type=range]').not('[filter-enabled]').each(function () {
+				$(this).attr('filter-enabled', '');
+				var filter_name = $(this).attr('filter-name');
+                var filter_key = $(this).attr('filter-key');
+				var _self = $(this);
 
-				// behaviour for ajax table
-				var ajax_table = $('#crudTable').DataTable();
-				var current_url = ajax_table.ajax.url();
-				var new_url = addOrUpdateUriParameter(current_url, parameter, value);
+				$(_self).find(".from, .to").change(function(e) {
+					e.preventDefault();
+					var from = $(_self).find(".from").val();
+					var to = $(_self).find(".to").val();
+					if (from || to) {
+						var range = {
+							'from': from,
+							'to': to
+						};
+						var value = JSON.stringify(range);
+					} else {
+						//this change to empty string,because addOrUpdateUriParameter method just judgment string
+						var value = '';
+					}
+					var parameter = filter_name;
 
-				// replace the datatables ajax url with new_url and reload it
-				new_url = normalizeAmpersand(new_url.toString());
-				ajax_table.ajax.url(new_url).load();
+					// behaviour for ajax table
+					var ajax_table = $('#crudTable').DataTable();
+					var current_url = ajax_table.ajax.url();
+					var new_url = addOrUpdateUriParameter(current_url, parameter, value);
 
-				// add filter to URL
-				crud.updateUrl(new_url);
+					// replace the datatables ajax url with new_url and reload it
+					new_url = normalizeAmpersand(new_url.toString());
+					ajax_table.ajax.url(new_url).load();
 
-				// mark this filter as active in the navbar-filters
-				if (URI(new_url).hasQuery('{{ $filter->name }}', true)) {
-					$('li[filter-key={{ $filter->key }}]').removeClass('active').addClass('active');
-				}
+					// add filter to URL
+					crud.updateUrl(new_url);
+
+					// mark this filter as active in the navbar-filters
+					if (URI(new_url).hasQuery(filter_name, true)) {
+						$(_self).removeClass('active').addClass('active');
+					}
+				});
+
+				$(_self).on('filter:clear', function(e) {
+					$(_self).removeClass('active');
+					$(_self).find(".from").val("");
+					$(_self).find(".to").val("");
+					$(_self).find(".to").trigger('change');
+				});
+
+				// range clear button
+				$(_self).find(".range-filter-clear-button").click(function(e) {
+					e.preventDefault();
+
+					$(_self).trigger('filter:clear');
+				});
 			});
-
-			$('li[filter-key={{ $filter->key }}]').on('filter:clear', function(e) {
-				$('li[filter-key={{ $filter->key }}]').removeClass('active');
-				$("li[filter-key={{ $filter->key }}] .from").val("");
-				$("li[filter-key={{ $filter->key }}] .to").val("");
-				$("li[filter-key={{ $filter->key }}] .to").trigger('change');
-			});
-
-			// range clear button
-			$(".range-filter-{{ $filter->key }}-clear-button").click(function(e) {
-				e.preventDefault();
-
-				$('li[filter-key={{ $filter->key }}]').trigger('filter:clear');
-			})
-
 		});
 	</script>
     @endBassetBlock

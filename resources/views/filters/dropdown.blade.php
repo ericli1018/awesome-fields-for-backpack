@@ -43,42 +43,49 @@
     @bassetBlock('backpack/crud/filters/dropdown.js')
 	<script>
 		jQuery(document).ready(function($) {
-			$("li.dropdown[filter-key={{ $filter->key }}] .dropdown-menu a").click(function(e) {
-				e.preventDefault();
+			$('li[filter-type=dropdown]').not('[data-filter-enabled]').each(function () {
+				$(this).attr('filter-enabled', '');
+				var filter_name = $(this).attr('filter-name');
+                var filter_key = $(this).attr('filter-key');
+				var _self = $(this);
 
-				var value = $(this).attr('dropdownkey');
-				var parameter = $(this).attr('parameter');
+				$(_self).find(".dropdown-menu a").click(function(e) {
+					e.preventDefault();
 
-		    	// behaviour for ajax table
-				var ajax_table = $("#crudTable").DataTable();
-				var current_url = ajax_table.ajax.url();
-				var new_url = addOrUpdateUriParameter(current_url, parameter, value);
+					var value = $(this).attr('dropdownkey');
+					var parameter = $(this).attr('parameter');
 
-				// replace the datatables ajax url with new_url and reload it
-				new_url = normalizeAmpersand(new_url.toString());
-				ajax_table.ajax.url(new_url).load();
+					// behaviour for ajax table
+					var ajax_table = $("#crudTable").DataTable();
+					var current_url = ajax_table.ajax.url();
+					var new_url = addOrUpdateUriParameter(current_url, parameter, value);
 
-				// add filter to URL
-				crud.updateUrl(new_url);
+					// replace the datatables ajax url with new_url and reload it
+					new_url = normalizeAmpersand(new_url.toString());
+					ajax_table.ajax.url(new_url).load();
 
-				// mark this filter as active in the navbar-filters
-				// mark dropdown items active accordingly
-				if (URI(new_url).hasQuery('{{ $filter->name }}', true)) {
-					$("li[filter-key={{ $filter->key }}]").removeClass('active').addClass('active');
-					$("li[filter-key={{ $filter->key }}] .dropdown-menu a").removeClass('active');
-					$(this).addClass('active');
-				}
-				else
-				{
-					$("li[filter-key={{ $filter->key }}]").trigger("filter:clear");
-				}
-			});
+					// add filter to URL
+					crud.updateUrl(new_url);
 
-			// clear filter event (used here and by the Remove all filters button)
-			$("li[filter-key={{ $filter->key }}]").on('filter:clear', function(e) {
-				// console.log('dropdown filter cleared');
-				$("li[filter-key={{ $filter->key }}]").removeClass('active');
-				$("li[filter-key={{ $filter->key }}] .dropdown-menu a").removeClass('active');
+					// mark this filter as active in the navbar-filters
+					// mark dropdown items active accordingly
+					if (URI(new_url).hasQuery(filter_name, true)) {
+						$(_self).removeClass('active').addClass('active');
+						$(_self).find(".dropdown-menu a").removeClass('active');
+						$(this).addClass('active');
+					}
+					else
+					{
+						$(_self).trigger("filter:clear");
+					}
+				});
+
+				// clear filter event (used here and by the Remove all filters button)
+				$(_self).on('filter:clear', function(e) {
+					// console.log('dropdown filter cleared');
+					$(_self).removeClass('active');
+					$(_self).find(".dropdown-menu a").removeClass('active');
+				});
 			});
 		});
 	</script>

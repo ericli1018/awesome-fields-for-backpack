@@ -88,7 +88,7 @@
 	
 	@bassetBlock('backpack/crud/filters/date_range.js')
   	<script>
-		function applyDateRangeFilter{{$filter->key}}(start, end) {
+		function applyDateRangeFilter(_self, filter_name, start, end) {
 
   			if (start && end) {
   				var dates = {
@@ -101,7 +101,7 @@
   				var value = '';
   			}
 
-            var parameter = '{{ $filter->name }}';
+            var parameter = filter_name;
 	    	// behaviour for ajax table
 			var ajax_table = $('#crudTable').DataTable();
 			var current_url = ajax_table.ajax.url();
@@ -112,56 +112,63 @@
 			// add filter to URL
 			crud.updateUrl(new_url);
 			// mark this filter as active in the navbar-filters
-			if (URI(new_url).hasQuery('{{ $filter->name }}', true)) {
-				$('li[filter-key={{ $filter->key }}]').removeClass('active').addClass('active');
+			if (URI(new_url).hasQuery(filter_name, true)) {
+				$(_self).removeClass('active').addClass('active');
 			} else {
-				$('li[filter-key={{ $filter->key }}]').trigger('filter:clear');
+				$(_self).trigger('filter:clear');
 			}
   		}
 
 		jQuery(document).ready(function($) {
+			if ($('html')[0].lang.length > 0)
+			{
+				moment.locale($('html')[0].lang);
+			}
+			//moment.locale('{{app()->getLocale()}}');
 
-            moment.locale('{{app()->getLocale()}}');
+			$('li[filter-type=date_range]').not('[filter-enabled]').each(function () {
+				$(this).attr('filter-enabled', '');
+				var filter_name = $(this).attr('filter-name');
+                var filter_key = $(this).attr('filter-key');
+				var _self = $(this);
 
-			var dateRangeInput = $('#daterangepicker-{{ $filter->key }}');
+				var dateRangeInput = $('#daterangepicker-' + filter_key);
 
-            $config = dateRangeInput.data('bs-daterangepicker');
+				$config = dateRangeInput.data('bs-daterangepicker');
 
-            $ranges = $config.ranges;
-            $config.ranges = {};
+				$ranges = $config.ranges;
+				$config.ranges = {};
 
-            //if developer configured ranges we convert it to moment() dates.
-            for (var key in $ranges) {
-                if ($ranges.hasOwnProperty(key)) {
-                    $config.ranges[key] = $.map($ranges[key], function($val) {
-                        return moment($val);
-                    });
-                }
-            }
+				//if developer configured ranges we convert it to moment() dates.
+				for (var key in $ranges) {
+					if ($ranges.hasOwnProperty(key)) {
+						$config.ranges[key] = $.map($ranges[key], function($val) {
+							return moment($val);
+						});
+					}
+				}
 
-            $config.startDate = moment($config.startDate);
+				$config.startDate = moment($config.startDate);
+				$config.endDate = moment($config.endDate);
 
-            $config.endDate = moment($config.endDate);
+				dateRangeInput.daterangepicker($config);
 
-
-            dateRangeInput.daterangepicker($config);
-
-
-            dateRangeInput.on('apply.daterangepicker', function(ev, picker) {
-				applyDateRangeFilter{{$filter->key}}(picker.startDate, picker.endDate);
-			});
-			$('li[filter-key={{ $filter->key }}]').on('hide.bs.dropdown', function () {
-				if($('.daterangepicker').is(':visible'))
-			    return false;
-			});
-			$('li[filter-key={{ $filter->key }}]').on('filter:clear', function(e) {
-				//if triggered by remove filters click just remove active class,no need to send ajax
-				$('li[filter-key={{ $filter->key }}]').removeClass('active');
-			});
-			// datepicker clear button
-			$(".daterangepicker-{{ $filter->key }}-clear-button").click(function(e) {
-				e.preventDefault();
-				applyDateRangeFilter{{$filter->key}}(null, null);
+				dateRangeInput.on('apply.daterangepicker', function(ev, picker) {
+					applyDateRangeFilter(_self, filter_name, picker.startDate, picker.endDate);
+				});
+				$(_self).on('hide.bs.dropdown', function () {
+					if($('.daterangepicker').is(':visible'))
+					return false;
+				});
+				$(_self).on('filter:clear', function(e) {
+					//if triggered by remove filters click just remove active class,no need to send ajax
+					$(_self).removeClass('active');
+				});
+				// datepicker clear button
+				$(_self).find(".daterangepicker-clear-button").click(function(e) {
+					e.preventDefault();
+					applyDateRangeFilter(_self, filter_name, null, null);
+				});
 			});
 		});
 	</script>

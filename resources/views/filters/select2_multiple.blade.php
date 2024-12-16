@@ -12,8 +12,8 @@
 				class="form-control input-sm select2"
 				placeholder="{{ $filter->placeholder }}"
 				data-filter-key="{{ $filter->key }}"
-				data-filter-type="select2_multiple"
 				data-filter-name="{{ $filter->name }}"
+				data-filter-type="select2_multiple"
 				data-language="{{ str_replace('_', '-', app()->getLocale()) }}"
 				multiple
 				>
@@ -82,8 +82,8 @@
     <script>
         jQuery(document).ready(function($) {
             // trigger select2 for each untriggered select2 box
-            $('select[name=filter_{{ $filter->key }}]').not('[data-filter-enabled]').each(function () {
-            	var filterName = $(this).attr('data-filter-name');
+            $('select[data-filter-type=select2_multiple]').not('[data-filter-enabled]').each(function () {
+            	var filter_name = $(this).attr('data-filter-name');
                 var filter_key = $(this).attr('data-filter-key');
 
                 $(this).select2({
@@ -118,7 +118,7 @@
 					crud.updateUrl(new_url);
 
 					// mark this filter as active in the navbar-filters
-					if (URI(new_url).hasQuery(filterName, true)) {
+					if (URI(new_url).hasQuery(filter_name, true)) {
 						$("li[filter-key="+filter_key+"]").addClass('active');
 					}
 					else
