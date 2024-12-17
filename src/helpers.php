@@ -2,10 +2,12 @@
 /*
     "autoload": {
         "exclude-from-classmap": [
-            "vendor/backpack/crud/src/helpers.php"
+            "vendor/backpack/crud/src/helpers.php",
+            "vendor/backpack/crud/src/app/Http/Controllers/ChartController.php"
         ],
         "files": [
-            "vendor/ericli1018/awesome-fields-for-backpack/src/helpers.php"
+            "vendor/ericli1018/awesome-fields-for-backpack/src/helpers.php",
+            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/ChartController.php"
         ],
         "psr-4": {
             ...
