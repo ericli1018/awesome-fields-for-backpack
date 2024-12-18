@@ -44,17 +44,13 @@
 	<div class="dropdown-menu p-0">
 		<div class="form-group backpack-filter mb-0">
 			<div class="input-group date">
-		        <div class="input-group-prepend">
-		          <span class="input-group-text"><i class="la la-calendar"></i></span>
-		        </div>
+		        <span class="input-group-text"><i class="la la-calendar"></i></span>
 		        <input class="form-control pull-right"
 		        		id="daterangepicker-{{ $filter->key }}"
 		        		type="text"
                         data-bs-daterangepicker="{{ json_encode($filter->options['date_range_options'] ?? []) }}"
 		        		>
-		        <div class="input-group-append daterangepicker-{{ $filter->key }}-clear-button">
-		          <a class="input-group-text" href=""><i class="la la-times"></i></a>
-		        </div>
+		        <a class="input-group-text daterangepicker-{{ $filter->key }}-clear-button" href=""><i class="la la-times"></i></a>
 		    </div>
 		</div>
 	</div>

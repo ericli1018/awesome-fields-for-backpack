@@ -18,9 +18,7 @@
 							value="{{ $filter->currentValue }}"
 						@endif
 		        		>
-		        <div class="input-group-append text-filter-{{ $filter->key }}-clear-button">
-		          <a class="input-group-text" href=""><i class="la la-times"></i></a>
-		        </div>
+		    	<a class="input-group-text text-filter-{{ $filter->key }}-clear-button" href=""><i class="la la-times"></i></a>
 		    </div>
 		</div>
 	</div>

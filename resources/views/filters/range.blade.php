@@ -5,45 +5,42 @@
 	class="nav-item dropdown {{ Request::get($filter->name)?'active':'' }}">
     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $filter->label }} <span class="caret"></span></a>
     <div class="dropdown-menu p-0">
-
-			<div class="form-group backpack-filter mb-0">
-					<?php
-                        $from = '';
-                        $to = '';
-                        if ($filter->currentValue) {
-                            $range = (array) json_decode($filter->currentValue);
-                            $from = $range['from'];
-                            $to = $range['to'];
-                        }
-                    ?>
-					<div class="input-group">
-				        <input class="form-control pull-right from"
-				        		type="number"
-									@if($from)
-										value = "{{ $from }}"
-									@endif
-									@if(array_key_exists('label_from', $filter->options))
-										placeholder = "{{ $filter->options['label_from'] }}"
-									@else
-										placeholder = "min value"
-									@endif
-				        		>
-								<input class="form-control pull-right to"
-				        		type="number"
-									@if($to)
-										value = "{{ $to }}"
-									@endif
-									@if(array_key_exists('label_to', $filter->options))
-										placeholder = "{{ $filter->options['label_to'] }}"
-									@else
-										placeholder = "max value"
-									@endif
-				        		>
-				        <div class="input-group-append range-filter-clear-button">
-				          <a class="input-group-text" href=""><i class="la la-times"></i></a>
-				        </div>
-				    </div>
+		<div class="form-group backpack-filter mb-0">
+			<?php
+				$from = '';
+				$to = '';
+				if ($filter->currentValue) {
+					$range = (array) json_decode($filter->currentValue);
+					$from = $range['from'];
+					$to = $range['to'];
+				}
+			?>
+			<div class="input-group">
+				<input class="form-control pull-right from"
+						type="number"
+							@if($from)
+								value = "{{ $from }}"
+							@endif
+							@if(array_key_exists('label_from', $filter->options))
+								placeholder = "{{ $filter->options['label_from'] }}"
+							@else
+								placeholder = "min value"
+							@endif
+						>
+						<input class="form-control pull-right to"
+								type="number"
+							@if($to)
+								value = "{{ $to }}"
+							@endif
+							@if(array_key_exists('label_to', $filter->options))
+								placeholder = "{{ $filter->options['label_to'] }}"
+							@else
+								placeholder = "max value"
+							@endif
+						>
+				<a class="input-group-text range-filter-clear-button" href=""><i class="la la-times"></i></a>
 			</div>
+		</div>
     </div>
   </li>
 
