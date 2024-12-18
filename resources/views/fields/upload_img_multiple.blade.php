@@ -229,7 +229,6 @@
 			font-weight: 400;
 			line-height: 1.5;
 			color: #5c6873;
-			background-color: #fff;
 			border: 1px solid #e4e7ea;
 			border-radius: 0.25rem;
 			font-weight: 400!important;
@@ -247,7 +246,6 @@
 			line-height: 1.5;
 			color: #5c6873;
 			content: "{{ trans('ericli1018.awesome-fields-for-backpack::upload-img-field.button_browse') }}";
-			background-color: #f0f3f9;
 			border-left: inherit;
 			border-radius: 0 0.25rem 0.25rem 0;
 		}

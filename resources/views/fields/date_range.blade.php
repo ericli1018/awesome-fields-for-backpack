@@ -55,11 +55,9 @@
             type="text"
             @include('crud::fields.inc.attributes')
             >
-        	<div class="input-group-append">
-	            <span class="input-group-text">
-                <span class="la la-calendar"></span>
-            </span>
-        </div>
+        <span class="input-group-text">
+            <span class="la la-calendar"></span>
+        </span>
     </div>
     {{-- HINT --}}
     @if (isset($field['hint']))

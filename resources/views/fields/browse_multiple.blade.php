@@ -39,12 +39,12 @@
     @endif
     </div>
 
-    <div class="btn-group" role="group" aria-label="..." style="margin-top: 3px;">
-        <button type="button" class="browse popup btn btn-sm btn-light">
+    <div class="btn-group" role="group" aria-label="..." style="margin-top: 0px;">
+        <button type="button" class="browse popup btn btn-light">
             <i class="la la-cloud-upload"></i>
             {{ trans('backpack::crud.browse_uploads') }}
         </button>
-        <button type="button" class="browse clear btn btn-sm btn-light">
+        <button type="button" class="browse clear btn btn-light">
             <i class="la la-eraser"></i>
             {{ trans('backpack::crud.clear') }}
         </button>
@@ -56,16 +56,14 @@
     @endif
 
     <script type="text/html" data-marker="browse_multiple_template">
-        <div class="input-group input-group-sm">
+        <div class="input-group">
             <input type="text" @include('crud::fields.inc.attributes') readonly>
-            <div class="input-group-btn">
-                <button type="button" class="browse remove btn btn-sm btn-light">
-                    <i class="la la-trash"></i>
-                </button>
-                @if($sortable)
-                    <button type="button" class="browse move btn btn-sm btn-light"><span class="la la-sort"></span></button>
-                @endif
-            </div>
+            <button type="button" class="browse remove input-group-text">
+                <i class="la la-trash"></i>
+            </button>
+            @if($sortable)
+            <button type="button" class="browse move input-group-text"><span class="la la-sort"></span></button>
+            @endif
         </div>
     </script>
 

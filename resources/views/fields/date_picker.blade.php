@@ -7,7 +7,7 @@
     }
 
     $field['value'] = old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '';
-    $field['attributes']['style'] = $field['attributes']['style'] ?? 'background-color: white!important;';
+    $field['attributes']['style'] = $field['attributes']['style'] ?? '';
     $field['attributes']['readonly'] = $field['attributes']['readonly'] ?? 'readonly';
 
     $field_language = isset($field['date_picker_options']['language']) ? $field['date_picker_options']['language'] : \App::getLocale();
@@ -24,11 +24,9 @@
             type="text"
             @include('crud::fields.inc.attributes')
             >
-        <div class="input-group-append">
-            <span class="input-group-text">
-                <span class="la la-calendar"></span>
-            </span>
-        </div>
+        <span class="input-group-text">
+            <span class="la la-calendar"></span>
+        </span>
     </div>
     
     {{-- HINT --}}
@@ -41,6 +39,11 @@
 @push('crud_fields_styles')
     <!-- include date_picker css-->
     <link href="{{ basset('https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        .daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.secondselect, .daterangepicker select.ampmselect {
+            background-color: gray;
+        }
+    </style>
 @endpush
 
 {{-- CUSTOM JS --}}
@@ -71,26 +74,26 @@
 
             var $existingVal = $field.val();
 
-                if( $existingVal && $existingVal.length ){
-                    // Passing an ISO-8601 date string (YYYY-MM-DD) to the Date constructor results in
-                    // varying behavior across browsers. Splitting and passing in parts of the date
-                    // manually gives us more defined behavior.
-                    // See https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
-                    var parts = $existingVal.split('-');
-                    var year = parts[0];
-                    var month = parts[1] - 1; // Date constructor expects a zero-indexed month
-                    var day = parts[2];
-                    preparedDate = new Date(year, month, day).format($customConfig.format);
-                    $fake.val(preparedDate);
-                    $picker.bootstrapDP('update', preparedDate);
-                }
+            if( $existingVal && $existingVal.length ){
+                // Passing an ISO-8601 date string (YYYY-MM-DD) to the Date constructor results in
+                // varying behavior across browsers. Splitting and passing in parts of the date
+                // manually gives us more defined behavior.
+                // See https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
+                var parts = $existingVal.split('-');
+                var year = parts[0];
+                var month = parts[1] - 1; // Date constructor expects a zero-indexed month
+                var day = parts[2];
+                preparedDate = new Date(year, month, day).format($customConfig.format);
+                $fake.val(preparedDate);
+                $picker.bootstrapDP('update', preparedDate);
+            }
 
-                // prevent users from typing their own date
-                // since the js plugin does not support it
-                // $fake.on('keydown', function(e){
-                //     e.preventDefault();
-                //     return false;
-                // });
+            // prevent users from typing their own date
+            // since the js plugin does not support it
+            // $fake.on('keydown', function(e){
+            //     e.preventDefault();
+            //     return false;
+            // });
 
             $picker.on('show hide change', function(e) {
                 if( e.date ){
