@@ -100,7 +100,7 @@ if($activeInlineCreate) {
         @include('crud::fields.inc.translatable_icon')
 
         @if($activeInlineCreate)
-            @include('crud::fields.relationship.inline_create_button', ['field' => $field])
+            @include('ericli1018.awesome-fields-for-backpack::fields.relationship.inline_create_button', ['field' => $field])
         @endif
 <select
         name="{{ $field['name'].($field['multiple']?'[]':'') }}"
@@ -128,7 +128,7 @@ if($activeInlineCreate) {
         data-language="{{ str_replace('_', '-', app()->getLocale()) }}"
 
         @if($activeInlineCreate)
-            @include('crud::fields.relationship.field_attributes')
+            @include('ericli1018.awesome-fields-for-backpack::fields.relationship.field_attributes')
         @endif
 
         @include('crud::fields.inc.attributes', ['default_class' =>  'form-control select2_field'])
@@ -154,20 +154,21 @@ if($activeInlineCreate) {
         {{-- FIELD CSS - will be loaded in the after_styles section --}}
         @push('crud_fields_styles')
 
-            <!-- include select2 css-->
-            <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-            <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- include select2 css-->
+        <link href="{{ basset(base_path('vendor/select2/select2/dist/css/select2.min.css')) }}" rel="stylesheet" type="text/css" />
+        <link href="{{ basset('https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
         @endpush
 
         {{-- FIELD JS - will be loaded in the after_scripts section --}}
         @push('crud_fields_scripts')
 
-            <!-- include select2 js-->
-            <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
-            @if (app()->getLocale() !== 'en')
-            <script src="{{ asset('packages/select2/dist/js/i18n/' . str_replace('_', '-', app()->getLocale()) . '.js') }}"></script>
-            @endif
-            <script>
+        <!-- include select2 js-->
+        <script src="{{ basset(base_path('vendor/select2/select2/dist/js/select2.full.min.js')) }}" crossorigin="anonymous"></script>
+        @if (app()->getLocale() !== 'en')
+        <script src="{{ basset(base_path('vendor/select2/select2/dist/js/i18n/' . str_replace('_', '-', app()->getLocale()) . '.js')) }}" crossorigin="anonymous"></script>
+        @endif
+        
+        <script>
 
 document.styleSheets[0].addRule('.select2-selection__clear::after','content:  "{{ trans('backpack::crud.clear') }}";');
 
@@ -261,14 +262,12 @@ function setupInlineCreateButtons(element) {
     var $form = element.closest('form');
 
     $inlineCreateButtonElement.on('click', function () {
-
+        
         //we change button state so users know something is happening.
         var loadingText = '<span class="la la-spinner la-spin" style="font-size:18px;"></span>';
         if ($inlineCreateButtonElement.html() !== loadingText) {
             $inlineCreateButtonElement.data('original-text', $inlineCreateButtonElement.html());
             $inlineCreateButtonElement.html(loadingText);
-
-
         }
 
         //prepare main form fields to be submited in case there are some.
@@ -370,8 +369,7 @@ function triggerModal(element) {
     var $ajax = element.attr('data-field-ajax') == 'true' ? true : false;
     var $force_select = (element.attr('data-force-select') == 'true') ? true : false;
 
-
-    $modal.modal();
+    $modal.modal('show');
 
     initializeFieldsWithJavascript($form);
 
@@ -420,17 +418,13 @@ function triggerModal(element) {
 
                 $modal.modal('hide');
 
-
-
                 new Noty({
                     type: "info",
                     text: '{{ trans('backpack::crud.related_entry_created_success') }}',
                 }).show();
             },
             error: function (result) {
-
                 var $errors = result.responseJSON.errors;
-
                 let message = '';
                 for (var i in $errors) {
                     message += $errors[i] + ' \n';

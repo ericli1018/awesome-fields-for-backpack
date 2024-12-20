@@ -3,11 +3,21 @@
     "autoload": {
         "exclude-from-classmap": [
             "vendor/backpack/crud/src/helpers.php",
-            "vendor/backpack/crud/src/app/Http/Controllers/ChartController.php"
+            "vendor/backpack/crud/src/app/Http/Controllers/ChartController.php",
+            "vendor/backpack/crud/src/app/Http/Controllers/Operations/BulkCloneOperation.php",
+            "vendor/backpack/crud/src/app/Http/Controllers/Operations/BulkDeleteOperation.php",
+            "vendor/backpack/crud/src/app/Http/Controllers/Operations/CloneOperation.php",
+            "vendor/backpack/crud/src/app/Http/Controllers/Operations/FetchOperation.php",
+            "vendor/backpack/crud/src/app/Http/Controllers/Operations/InlineCreateOperation.php"
         ],
         "files": [
             "vendor/ericli1018/awesome-fields-for-backpack/src/helpers.php",
-            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/ChartController.php"
+            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/ChartController.php",
+            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/Operations/BulkCloneOperation.php",
+            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/Operations/BulkDeleteOperation.php",
+            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/Operations/CloneOperation.php",
+            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/Operations/FetchOperation.php",
+            "vendor/ericli1018/awesome-fields-for-backpack/src/Http/Controllers/Operations/InlineCreateOperation.php"
         ],
         "psr-4": {
             ...

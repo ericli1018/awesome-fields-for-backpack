@@ -36,4 +36,4 @@
     }
 @endphp
 
-@include('fields.relationship.'.$field['type'])
+@include('ericli1018.awesome-fields-for-backpack::fields.relationship.'.$field['type'])
