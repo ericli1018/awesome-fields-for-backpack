@@ -103,9 +103,8 @@
 	                    value = values.length ? JSON.stringify(values) : '';
 	                }
 
-					var parameter = '{{ $filter->name }}';
-
-			    	// behaviour for ajax table
+					var parameter = filter_name;
+					// behaviour for ajax table
 					var ajax_table = $("#crudTable").DataTable();
 					var current_url = ajax_table.ajax.url();
 					var new_url = addOrUpdateUriParameter(current_url, parameter, value);
