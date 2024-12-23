@@ -64,7 +64,7 @@
                 <tr class="array-row clonable" style="display: none;">
                     @foreach( $field['columns'] as $column => $label)
                     <td>
-                        <input class="form-control form-control-sm" type="text" data-cell-name="item.{{ $column }}">
+                        <input class="form-control" type="text" data-cell-name="item.{{ $column }}">
                     </td>
                     @endforeach
                     <td>
