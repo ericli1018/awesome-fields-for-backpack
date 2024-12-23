@@ -1,6 +1,7 @@
 {{-- regular object attribute --}}
 @php
     $value = data_get($entry, $column['name']);
+    $bgColor = null;
 
     if( !empty($value) ) {
 
@@ -12,7 +13,25 @@
         } else {
             $video = $value;
         }
-        $bgColor = $video->provider == 'vimeo' ? '#00ADEF' : '#DA2724';
+        if (!isset($video->provider))
+        {
+            unset($video);
+        }
+        else 
+        {
+            switch ($video->provider)
+            {
+            case 'vimeo':
+                $bgColor = '#00ADEF';
+                break;
+            case 'youtube':
+                $bgColor = '#DA2724';
+                break;
+            default:
+                unset($video);
+                break;
+            }
+        }
     }
 @endphp
 

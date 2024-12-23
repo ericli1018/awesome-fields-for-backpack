@@ -35,10 +35,10 @@ $field['wrapper']['data-video'] = '';
                 </a>
             </div>
             <div class="video-dummy">
-                <a class="video-previewLink youtube dummy" target="_blank" href="">
+                <a class="video-previewLink youtube dummy">
                     <i class="la la-lg la-youtube video-previewIcon dummy"></i>
                 </a>
-                <a class="video-previewLink vimeo dummy" target="_blank" href="">
+                <a class="video-previewLink vimeo dummy">
                     <i class="la la-lg la-vimeo video-previewIcon dummy"></i>
                 </a>
             </div>
@@ -178,6 +178,10 @@ $field['wrapper']['data-video'] = '';
 
                         callback(video);
                     }
+                    else
+                    {
+                        callback(null);
+                    }
                 }
             });
         };
@@ -195,7 +199,8 @@ $field['wrapper']['data-video'] = '';
             };
 
             fetch(api).then(function(response) {
-                if(response.ok) {
+                if(response.ok) 
+                {
                     response.json().then(function(v) {
 
                         v = v[0];
@@ -207,12 +212,16 @@ $field['wrapper']['data-video'] = '';
                         callback(video);
                     });
                 }
+                else
+                {
+                    callback(null);
+                }
             });
         };
 
         var parseVideoLink = function( link, callback, apiKey ){
 
-            var response = {success: false, message: 'unknown error occured, please try again', data: [] };
+            var response = {success: false, message: 'unknown error occured, please confirm link and try again', data: [] };
 
             try {
                 var parser = document.createElement('a');
@@ -285,8 +294,8 @@ $field['wrapper']['data-video'] = '';
             pWrap.fadeIn();
         };
 
-        var videoParsing = false;
-
+        var videoParsing = 0;
+       
         function bpFieldInitVideoElement(element) {
             var $this = element,
                 jsonField = $this.find('.video-json'),
@@ -315,17 +324,22 @@ $field['wrapper']['data-video'] = '';
             linkField.on('change', function(){
 
                 if( linkField.originalState != linkField.val() ){
+                    if ($(linkField).hasClass('is-invalid')) 
+                    {
+                        $(linkField).removeClass('is-invalid');
+                        videoParsing--;
+                    }
 
                     if( linkField.val().length ){
 
-                        videoParsing = true;
-
-                        parseVideoLink( linkField.val(), function( videoJson ){
-
+                        videoParsing++;
+                        
+                        parseVideoLink(linkField.val(), function( videoJson ) {
                             if( videoJson.success ){
                                 linkField.val( videoJson.data.url );
                                 jsonField.val( JSON.stringify(videoJson.data) );
                                 updateVideoPreview(videoJson.data, $this);
+                                videoParsing--;
                             }
                             else {
                                 pDummy.show();
@@ -334,13 +348,12 @@ $field['wrapper']['data-video'] = '';
                                     type: "error",
                                     text: videoJson.message
                                 }).show();
+                                $(linkField).addClass('is-invalid');
                             }
-
-                            videoParsing = false;
                         },apiKey);
                     }
                     else {
-                        videoParsing = false;
+                        //videoParsing = false;
                         jsonField.val('');
                         $this.find('.video-preview').fadeOut();
                         pDummy.show();
@@ -352,12 +365,15 @@ $field['wrapper']['data-video'] = '';
 
         jQuery(document).ready(function($) {
             $('form').on('submit', function(e){
-                if( videoParsing ){
+                if( videoParsing > 0 ){
                     new Noty({
                         type: "error",
                         text: "<strong>Please wait.</strong><br>Video details are still loading, please wait a moment or try again."
                     }).show();
                     e.preventDefault();
+                    setTimeout(() => {
+                        $(e.target).find("button[type=submit]").prop("disabled", false);
+                    }, 3000);
                     return false;
                 }
             })

@@ -102,7 +102,7 @@
     {{-- FIELD JS - will be loaded in the after_scripts section --}}
     @push('crud_fields_scripts')
         {{-- YOUR JS HERE --}}
-        <script type="text/javascript" src="{{ asset('packages/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+        <script src="{{ basset('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js') }}" crossorigin="anonymous"></script>
         @bassetBlock('backpack/crud/fields/table.js')
         <script>
             function bpFieldInitTableElement(element) {
