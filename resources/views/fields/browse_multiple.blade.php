@@ -99,16 +99,16 @@
             #cboxOverlay{background:#fff; opacity: 0.9; filter: alpha(opacity = 90);}
             #colorbox{outline:0;}
                 #cboxContent{margin-top:32px; overflow:visible; background:#000;}
-                    .cboxIframe{background:#fff;}
+                    .cboxIframe{background-color: black;}
                     #cboxError{padding:50px; border:1px solid #ccc;}
                     #cboxLoadedContent{background:#000; padding:1px;}
-                    #cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
+                    #cboxLoadingGraphic{background:url({{ basset(base_path('vendor/ericli1018/awesome-fields-for-backpack/assets/images/loading.gif')) }}) no-repeat center center;}
                     #cboxLoadingOverlay{background:#000;}
                     #cboxTitle{position:absolute; top:-22px; left:0; color:#000;}
                     #cboxCurrent{position:absolute; top:-22px; right:205px; text-indent:-9999px;}
 
                     /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
-                    #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; text-indent:-9999px; width:20px; height:20px; position:absolute; top:-20px; background:url(images/controls.png) no-repeat 0 0;}
+                    #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; text-indent:-9999px; width:20px; height:20px; position:absolute; top:-20px; background:url({{ basset(base_path('vendor/ericli1018/awesome-fields-for-backpack/assets/images/controls.png')) }}) no-repeat 0 0;}
                     
                     /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
                     #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
@@ -126,7 +126,8 @@
                     .cboxSlideshow_off #cboxSlideshow:hover{background-position:-75px -25px;}
 
             #cboxContent, #cboxLoadedContent, .cboxIframe {
-				background: transparent;
+                background: url({{ basset(base_path('vendor/ericli1018/awesome-fields-for-backpack/assets/images/loading.gif')) }}) no-repeat center center;
+				background-color: black;
 			}
         </style>
     @endBassetBlock
