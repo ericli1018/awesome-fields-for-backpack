@@ -12,7 +12,7 @@
     }
 
     if(!empty($column['value'])) {
-        $column['value'] = explode($column['split'], $column['value']);
+        $column['value'] = array_unique(explode($column['split'], $column['value']));
     }
 @endphp
 

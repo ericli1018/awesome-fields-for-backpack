@@ -282,20 +282,21 @@
 				$(metaDTInput).val(JSON.stringify(orgValues)).trigger('change');
 				
 				var fileInputOnClick = function(e){
-					existingFileDiv.find('.tmp-file-preview').remove();
-					var filePreviews = $('.' + fieldName + '-file-preview');
-	                if (uploadQtyLimit > 0 && uploadQtyLimit <= filePreviews.length) {
-						alert('{{ trans('ericli1018.awesome-fields-for-backpack::upload-img-field.qty_limit') }}');
-						e.preventDefault();
-						return;
-					}
+					// var filePreviews = $('.' + fieldName + '-file-preview');
+	                // if (uploadQtyLimit > 0 && uploadQtyLimit <= filePreviews.length) {
+					// 	alert('{{ trans('ericli1018.awesome-fields-for-backpack::upload-img-field.qty_limit') }}');
+					// 	e.preventDefault();
+					// 	return false;
+					// }
 				};
 
 				var fileInputOnChange = function(e) {
-					let selectedFiles = orgValues;
-					existingFileDiv.find('.tmp-file-preview').remove();
+					//let selectedFiles = orgValues;
+					let selectedFiles = [];
+
 					if ($(this)[0].files.length == 0) 
 					{
+						existingFileDiv.find('.tmp-file-preview').remove();
 						inputLabel.html("{{ trans('ericli1018.awesome-fields-for-backpack::upload-img-field.select_file') }}");
 					}
 					else
@@ -303,20 +304,23 @@
 						//let selectedFilesJsonStr = $(metaDTInput).val();
 						let qty = totalQty;
 						let errorFileNames = '';
-
+						
 						//selectedFiles = !!selectedFilesJsonStr ? JSON.parse(selectedFilesJsonStr) : [];
 						
-
 						var filePreviews = $('.' + fieldName + '-file-preview');
 						if (uploadQtyLimit > 0 && uploadQtyLimit < (filePreviews.length + $(this)[0].files.length)) {
+							e.preventDefault();
 							alert('{{ trans('ericli1018.awesome-fields-for-backpack::upload-img-field.qty_limit') }}');
-							setTimeout(fileInputRebuild, 1);
-							return;
+							//setTimeout(fileInputRebuild, 1);
+							return false;
 						}
 
+						
+
 						inputLabel.html("{{ trans('ericli1018.awesome-fields-for-backpack::upload-img-field.selected_file') }}");
-					
+						
 						Array.from($(this)[0].files).forEach(file => {
+							console.log(file.name);
 							var isNameDup = false;
 							if (selectedFiles.find(o => o.fn == file.name)) {
 								errorFileNames += (errorFileNames != '\n' ? '\n' : '\n');
@@ -422,7 +426,6 @@
 					}
 					$(DTInput).val(JSON.stringify(selectedFiles)).trigger('change');
 					updateMetaDT();
-					
 		        }
 
 				var fileInputRebuild = function() {
@@ -491,7 +494,7 @@
 							newSelectedFiles.push(item);
 						}
 					});
-					orgValues = newSelectedFiles;
+					//orgValues = newSelectedFiles;
 					updateMetaDT();
 		        });
 
